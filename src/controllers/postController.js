@@ -1,4 +1,5 @@
 import { Post, PostImage, User } from '../models/index.js';
+import { Op } from 'sequelize'; 
 
 export const createPost = async (req, res) => {
   try {
@@ -41,5 +42,40 @@ export const createPost = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error interno del servidor al crear el post' });
+  }
+};
+
+export const getAllPosts = async (req, res) => {
+  try {
+    // 1. Leemos la variable de entorno o usamos 6 por defecto
+    const maxMonths = parseInt(process.env.COMMENT_MAX_AGE_MONTHS) || 6;
+    
+    // 2. Calculamos la fecha límite (Hace X meses exactos desde hoy)
+    const cutoffDate = new Date();
+    cutoffDate.setMonth(cutoffDate.getMonth() - maxMonths);
+
+    // 3. Buscamos todos los posts con sus relaciones
+    const posts = await Post.findAll({
+      include: [
+        { 
+          model: PostImage 
+        },
+        {
+          model: Comment,
+          required: false, // required: false hace un LEFT JOIN (trae el post aunque no tenga comentarios)
+          where: {
+            createdAt: {
+              [Op.gte]: cutoffDate // gte = Greater Than or Equal (mayor o igual a la fecha límite)
+            }
+          }
+        }
+      ],
+      order: [['createdAt', 'DESC']] // Ordenamos del más nuevo al más viejo
+    });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener las publicaciones' });
   }
 };
