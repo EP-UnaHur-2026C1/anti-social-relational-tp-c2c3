@@ -157,7 +157,71 @@ paths:
           description: El nombre de la etiqueta es obligatorio
         '404':
           description: Post no encontrado
+    /posts/{id}/images:
+    post:
+      summary: Agregar una imagen a una publicación
+      description: Asocia una nueva imagen a un post existente.
+      tags:
+        - Imágenes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del post
+          schema:
+            type: integer
+            example: 1
 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  example: "https://imgur.com/foto.png"
+
+      responses:
+        '201':
+          description: Imagen agregada correctamente
+        '400':
+          description: La URL es obligatoria
+        '404':
+          description: Post no encontrado
+
+  /posts/{id}/images/{imageId}:
+    delete:
+      summary: Eliminar una imagen de una publicación
+      description: Elimina una imagen asociada a un post.
+      tags:
+        - Imágenes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del post
+          schema:
+            type: integer
+            example: 1
+
+        - name: imageId
+          in: path
+          required: true
+          description: ID de la imagen
+          schema:
+            type: integer
+            example: 5
+
+      responses:
+        '200':
+          description: Imagen eliminada correctamente
+        '404':
+          description: Imagen no encontrada
 components:
   schemas:
     PostResponse:

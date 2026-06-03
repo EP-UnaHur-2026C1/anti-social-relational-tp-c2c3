@@ -24,3 +24,69 @@ export const createUser = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.findAll();
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: 'Error al obtener los usuarios'
+    });
+  }
+};
+
+export const getUserByNickName = async (req, res) => {
+  try {
+    const { nickName } = req.params;
+
+    const user = await User.findByPk(nickName);
+
+    if (!user) {
+      return res.status(404).json({
+        error: 'Usuario no encontrado'
+      });
+    }
+
+    res.status(200).json(user);
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: 'Error al obtener el usuario'
+    });
+  }
+};
+
+
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { nickName } = req.params;
+
+    const user = await User.findByPk(nickName);
+
+    if (!user) {
+      return res.status(404).json({
+        error: 'Usuario no encontrado'
+      });
+    }
+
+    await user.destroy();
+
+    res.status(200).json({
+      message: 'Usuario eliminado correctamente'
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: 'Error al eliminar el usuario'
+    });
+  }
+};
