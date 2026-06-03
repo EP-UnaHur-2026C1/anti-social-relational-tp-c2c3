@@ -1,14 +1,13 @@
 import { Router } from 'express';
 import { createPost, getAllPosts } from '../controllers/postController.js';
 import { createComment } from '../controllers/commentController.js';
-
+import { addTagToPost } from '../controllers/tagController.js';
 const router = Router();
 
-// Rutas de Publicaciones
 router.post('/', createPost);
-router.get('/', getAllPosts); // <-- Nueva ruta GET
+router.get('/', getAllPosts);
+router.post('/:id/comments', createComment);
 
-// Ruta para comentar un post específico
-router.post('/:id/comments', createComment); // <-- Nueva ruta de comentarios
+router.post('/:id/tags', addTagToPost); 
 
 export default router;

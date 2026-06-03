@@ -1,0 +1,210 @@
+openapi: 3.0.3
+info:
+  title: UnaHur Anti-Social Net API
+  description: Producto Mínimo Viable (MVP) para la red social de la cátedra. Incluye validaciones de esquemas y lógica de filtrado de comentarios por antigüedad.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Servidor de Desarrollo Local
+
+paths:
+  /users:
+    post:
+      summary: Registrar un nuevo usuario
+      description: Crea un usuario con un nickName único en el sistema.
+      tags:
+        - Usuarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nickName
+              properties:
+                nickName:
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                  example: "estudiante_unahur"
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+        '400':
+          description: Error de validación o el usuario ya existe
+
+  /posts:
+    get:
+      summary: Obtener todas las publicaciones
+      description: Devuelve el listado de posts ordenados por fecha (más recientes primero). Oculta dinámicamente los comentarios cuya antigüedad supera los meses configurados en el sistema.
+      tags:
+        - Publicaciones
+      responses:
+        '200':
+          description: Listado de publicaciones obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostResponse'
+    
+    post:
+      summary: Crear una nueva publicación
+      description: Crea un post principal. Opcionalmente, puede recibir un arreglo de URLs para asociar imágenes.
+      tags:
+        - Publicaciones
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - description
+                - user_nickName
+              properties:
+                description:
+                  type: string
+                  minLength: 1
+                  example: "Terminando el diseño del juego retro. ¡Los sprites quedaron de 50x50!"
+                user_nickName:
+                  type: string
+                  example: "estudiante_unahur"
+                images:
+                  type: array
+                  description: Arreglo opcional de URLs de imágenes
+                  items:
+                    type: string
+                    format: uri
+                    example: "https://imgur.com/sprite_boss.png"
+      responses:
+        '201':
+          description: Post creado exitosamente
+        '400':
+          description: Error de validación (ej. URL inválida o falta descripción)
+        '404':
+          description: El usuario especificado no existe
+
+  /posts/{id}/comments:
+    post:
+      summary: Agregar un comentario a un post
+      tags:
+        - Comentarios
+      parameters:
+        - name: id
+          in: path
+          description: ID numérico de la publicación
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - text
+                - user_nickName
+              properties:
+                text:
+                  type: string
+                  example: "¡Excelente avance!"
+                user_nickName:
+                  type: string
+                  example: "estudiante_unahur"
+      responses:
+        '201':
+          description: Comentario añadido correctamente
+        '400':
+          description: Faltan datos obligatorios
+        '404':
+          description: El post a comentar no existe
+
+  /posts/{id}/tags:
+    post:
+      summary: Vincular una etiqueta a un post
+      description: Asocia una etiqueta a una publicación. Si la etiqueta no existe en el sistema, la crea automáticamente.
+      tags:
+        - Etiquetas
+      parameters:
+        - name: id
+          in: path
+          description: ID numérico de la publicación
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  example: "desarrollo"
+      responses:
+        '200':
+          description: Etiqueta vinculada con éxito
+        '400':
+          description: El nombre de la etiqueta es obligatorio
+        '404':
+          description: Post no encontrado
+
+components:
+  schemas:
+    PostResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: "Terminando el diseño del juego retro."
+        createdAt:
+          type: string
+          format: date-time
+        user_nickName:
+          type: string
+          example: "estudiante_unahur"
+        PostImages:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              url:
+                type: string
+                format: uri
+        Comments:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              text:
+                type: string
+              createdAt:
+                type: string
+                format: date-time
+              user_nickName:
+                type: string
+        Tags:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
