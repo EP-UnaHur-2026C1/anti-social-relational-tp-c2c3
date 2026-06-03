@@ -11,7 +11,7 @@ const User = sequelize.define('User', {
 }, {
   // Sequelize crea automáticamente createdAt y updatedAt
   // Si no quieres el updatedAt, lo deshabilitamos así:
- // updatedAt: false 
+   updatedAt: false 
 });
 
 export default User;

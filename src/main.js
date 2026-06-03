@@ -2,7 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import sequelize from './config/database.js';
-
+import './models/index.js';
+import userRoutes from './routes/userRoutes.js';
+import postRoutes from './routes/postRoutes.js'
 dotenv.config();
 
 const app = express();
@@ -12,6 +14,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
 // Ruta de prueba
 app.get('/api/ping', (req, res) => {
   res.json({ message: 'El servidor está funcionando' });
@@ -24,7 +28,6 @@ const startServer = async () => {
     await sequelize.authenticate();
     console.log('Conexión a la base de datos establecida con éxito.');
 
-    // Sincronizamos los modelos (por ahora vacío, luego creará las tablas)
     await sequelize.sync({ force: false });
     
     app.listen(PORT, () => {
