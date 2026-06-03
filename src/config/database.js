@@ -1,11 +1,12 @@
 import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-// Inicializamos Sequelize indicando que usaremos SQLite
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: './unahur_db.sqlite',
-  // Opcional: Puedes poner 'false' para que no ensucie la consola mostrando cada consulta SQL
-  logging: false 
+dotenv.config();
+
+// Inicializamos Sequelize con la URL de nuestra base de datos en Docker
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  logging: false, // Cambia a true si quieres ver las consultas SQL en la consola
 });
 
 export default sequelize;
