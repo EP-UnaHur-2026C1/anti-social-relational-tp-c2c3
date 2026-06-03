@@ -33,6 +33,53 @@ paths:
           description: Usuario creado exitosamente
         '400':
           description: Error de validación o el usuario ya existe
+      
+    get:
+      summary: Obtener todos los usuarios
+      tags:
+        - Usuarios
+      responses:
+        '200':
+          description: Lista de usuarios obtenida correctamente
+
+  /users/{nickName}:
+    get:
+      summary: Obtener un usuario por nickname
+      tags:
+        - Usuarios
+      parameters:
+        - name: nickName
+          in: path
+          required: true
+          description: Nickname del usuario
+          schema:
+            type: string
+            example: Agus
+
+      responses:
+        '200':
+          description: Usuario encontrado
+        '404':
+          description: Usuario no encontrado
+
+    delete:
+      summary: Eliminar un usuario
+      tags:
+        - Usuarios
+      parameters:
+        - name: nickName
+          in: path
+          required: true
+          description: Nickname del usuario
+          schema:
+            type: string
+            example: Agus
+
+      responses:
+        '200':
+          description: Usuario eliminado correctamente
+        '404':
+          description: Usuario no encontrado
 
   /posts:
     get:
@@ -157,7 +204,7 @@ paths:
           description: El nombre de la etiqueta es obligatorio
         '404':
           description: Post no encontrado
-    /posts/{id}/images:
+  /posts/{id}/images:
     post:
       summary: Agregar una imagen a una publicación
       description: Asocia una nueva imagen a un post existente.
