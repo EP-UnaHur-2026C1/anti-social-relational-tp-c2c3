@@ -5,9 +5,11 @@ export const createUser = async (req, res) => {
     // Extraemos el nickName del cuerpo (body) de la petición
     const { nickName } = req.body;
 
-    if (!nickName) {
+    // Al implementar la validación con Joi, esta parte ya no es necesaria porque si el nickName no cumple con las reglas, 
+    // la función validateSchema devolverá un error antes de llegar a este punto.
+    /*if (!nickName) {
       return res.status(400).json({ error: 'El nickName es obligatorio' });
-    }
+    }*/
 
     const newUser = await User.create({ nickName });
     
