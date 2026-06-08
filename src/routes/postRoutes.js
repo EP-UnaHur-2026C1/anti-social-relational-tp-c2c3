@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createPost, getAllPosts } from '../controllers/postController.js';
+import { createPost, getAllPosts , deletePost} from '../controllers/postController.js';
 import { createComment } from '../controllers/commentController.js';
 import { addTagToPost } from '../controllers/tagController.js';
 import { addImageToPost, deleteImageFromPost} from '../controllers/postImageController.js'
@@ -14,5 +14,6 @@ router.post('/:id/comments', createComment);
 router.post('/:id/tags', addTagToPost); 
 router.post('/:id/images', addImageToPost)
 router.delete('/:id/images/:imageId', deleteImageFromPost)
+router.delete('/:id', deletePost)
 
 export default router;
