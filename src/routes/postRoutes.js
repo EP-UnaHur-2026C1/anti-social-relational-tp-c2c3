@@ -3,6 +3,7 @@ import { createPost, getAllPosts } from '../controllers/postController.js';
 import { createComment } from '../controllers/commentController.js';
 import { addTagToPost } from '../controllers/tagController.js';
 import { addImageToPost, deleteImageFromPost} from '../controllers/postImageController.js'
+import { validateSchema, createUserSchema } from '../schemas/userSchema.js'; // Hay que importar userSchema por el nickName
 import { createPostSchema } from '../schemas/postSchema.js';
 
 const router = Router();
