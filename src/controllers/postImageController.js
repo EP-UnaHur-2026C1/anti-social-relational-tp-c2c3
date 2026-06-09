@@ -31,29 +31,26 @@ export const addImageToPost = async (req, res) => {
 
 };
 
-
 export const deleteImageFromPost = async (req, res) => {
-    try{
-        const { imageId } = req.params
+    try {
+        const { id, imageId } = req.params;
+        console.log(`Buscando imagen ${imageId} perteneciente al post ${id}`);
+        
+        const image = await PostImage.findOne({
+            where: {
+                id: imageId,
+                post_id: id
+            }
+        });
 
-        const image = await PostImage.findByPk(imageId)
-
-        if(!image){
-            return res.status(404).json({
-                error: 'Imagen no encontrada.'
-            })
+        if (!image) {
+            return res.status(404).json({ error: 'Imagen no encontrada en este post.' });
         }
 
         await image.destroy();
-
-        res.status(200).json({
-            message: 'Imagen eliminada correctamente.'
-        })
-    } catch(error){
-        console.error(error)
-
-        res.status(500).json({
-            error: 'Error al eliminar la imagen.'
-        })
+        res.status(200).json({ message: 'Imagen eliminada correctamente.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al eliminar.' });
     }
 }
