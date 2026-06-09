@@ -93,8 +93,7 @@ export const deletePost = async (req, res) => {
       return res.status(404).json({ error: 'El post que intentas eliminar no existe' });
     }
 
-    // 2. Eliminamos el registro de la base de datos
-    await post.destroy();
+    await post.destroy(); //Con destrou() eliminamos el registro de la base de datos.
 
     res.status(200).json({ message: 'Publicación eliminada correctamente' });
 

@@ -1,6 +1,5 @@
 import { Post, PostImage } from '../models/index.js';
 
-
 export const addImageToPost = async (req, res) => {
     try {
         const { id } = req.params;
@@ -27,8 +26,6 @@ export const addImageToPost = async (req, res) => {
             error: 'Error al agregar la imagen.'
         });
     }
-
-
 };
 
 export const deleteImageFromPost = async (req, res) => {
@@ -53,4 +50,4 @@ export const deleteImageFromPost = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Error al eliminar.' });
     }
-}
+};

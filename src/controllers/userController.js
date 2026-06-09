@@ -7,6 +7,7 @@ export const createUser = async (req, res) => {
 
     // Al implementar la validación con Joi, esta parte ya no es necesaria porque si el nickName no cumple con las reglas, 
     // la función validateSchema devolverá un error antes de llegar a este punto.
+
     /*if (!nickName) {
       return res.status(400).json({ error: 'El nickName es obligatorio' });
     }*/
@@ -64,8 +65,6 @@ export const getUserByNickName = async (req, res) => {
   }
 };
 
-
-
 export const deleteUser = async (req, res) => {
   try {
     const { nickName } = req.params;
@@ -78,7 +77,7 @@ export const deleteUser = async (req, res) => {
       });
     }
 
-    await user.destroy();
+    await user.destroy(); // Usamos destroy() para elimiaar registro de db.
 
     res.status(200).json({
       message: 'Usuario eliminado correctamente'

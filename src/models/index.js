@@ -11,7 +11,6 @@ Post.belongsTo(User, { foreignKey: 'user_nickName', targetKey: 'nickName' });
 Post.hasMany(PostImage, { foreignKey: 'post_id' });
 PostImage.belongsTo(Post, { foreignKey: 'post_id' });
 
-
 User.hasMany(Comment, { foreignKey: 'user_nickName', sourceKey: 'nickName' });
 Comment.belongsTo(User, { foreignKey: 'user_nickName', targetKey: 'nickName' });
 
@@ -20,6 +19,5 @@ Comment.belongsTo(Post, { foreignKey: 'post_id' });
 
 Post.belongsToMany(Tag, { through: 'Post_Tags', foreignKey: 'post_id' });
 Tag.belongsToMany(Post, { through: 'Post_Tags', foreignKey: 'tag_id' });
-
 
 export { User, Post, PostImage, Comment, Tag };

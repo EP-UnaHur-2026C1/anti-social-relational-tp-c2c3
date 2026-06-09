@@ -15,12 +15,12 @@ export const addTagToPost = async (req, res) => {
       return res.status(404).json({ error: 'Post no encontrado' });
     }
 
-    // 2. Buscamos la etiqueta, o la creamos si es la primera vez que se usa.
+    // 2. Buscamos la etiqueta o la creamos si es la primera vez que se usa.
     const [tag] = await Tag.findOrCreate({
       where: { name: name.toLowerCase() }
     });
 
-    // 3. Magia de Sequelize: inserta la relación en la tabla intermedia (Post_Tags)
+    // 3. Sequelize: inserta la relación en la tabla intermedia (Post_Tags)
     await post.addTag(tag);
 
     res.status(200).json({ message: 'Etiqueta vinculada con éxito al post', tag });

@@ -15,7 +15,6 @@ export const createComment = async (req, res) => {
       return res.status(404).json({ error: 'El post que intentas comentar no existe' });
     }
 
-   
     const newComment = await Comment.create({
       text,
       user_nickName,
