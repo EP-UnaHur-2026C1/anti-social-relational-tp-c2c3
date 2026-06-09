@@ -1,4 +1,4 @@
-import { Post, PostImage, User, Comment } from '../models/index.js';
+import { Post, PostImage, User, Comment, Tag } from '../models/index.js';
 import { Op } from 'sequelize'; 
 
 export const createPost = async (req, res) => {
@@ -68,6 +68,9 @@ export const getAllPosts = async (req, res) => {
               [Op.gte]: cutoffDate // gte = Greater Than or Equal (mayor o igual a la fecha límite)
             }
           }
+        },
+        { 
+          model: Tag 
         }
       ],
       order: [['createdAt', 'DESC']] // Ordenamos del más nuevo al más viejo
