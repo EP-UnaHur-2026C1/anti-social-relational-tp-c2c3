@@ -1,4 +1,4 @@
-import { Post, PostImage, User } from '../models/index.js';
+import { Post, PostImage, User, Comment } from '../models/index.js';
 import { Op } from 'sequelize'; 
 
 export const createPost = async (req, res) => {
